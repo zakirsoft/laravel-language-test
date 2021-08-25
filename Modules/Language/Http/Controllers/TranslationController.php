@@ -33,7 +33,7 @@ class TranslationController extends Controller
         $path = base_path('resources/lang/' . $code . '.json');
         $translations = json_decode(file_get_contents($path), true);
         $language = Language::where('code', $code)->first();
-        return view('language.lang_view', compact('language', 'translations'));
+        return view('language::lang_view', compact('language', 'translations'));
 
         // \Log::debug($translations);
     }

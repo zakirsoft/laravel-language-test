@@ -5,6 +5,8 @@ namespace Modules\Language\Http\Controllers;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+
+use Illuminate\Support\Facades\File;
 use Modules\Language\Entities\Language;
 use Illuminate\Contracts\Support\Renderable;
 
@@ -26,7 +28,11 @@ class LanguageController extends Controller
      */
     public function create()
     {
-        return view('language::create');
+        $path = base_path('modules/language/resources/json/languages.json');
+        $translations = json_decode(file_get_contents($path), true);
+
+        // dd($translations);
+        return view('language::create', compact('translations'));
     }
 
     /**
@@ -36,6 +42,17 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'name' => 'required',
+                'code' => 'required'
+            ],
+            [
+                'name.required' => 'You must select a language',
+                'code.required' => 'You must select a language code'
+            ],
+        );
+
         $language = Language::create([
             'name' => $request->name,
             'code' => $request->code,
@@ -46,7 +63,7 @@ class LanguageController extends Controller
             $fileName = base_path('resources/lang/' . Str::slug($request->code) . '.json');
             copy($baseFile, $fileName);
         }
-        return back();
+        return back()->with('msg', 'Language added successfully!');
     }
 
     /**
@@ -64,9 +81,12 @@ class LanguageController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function edit(Language $language)
     {
-        return view('language::edit');
+        $path = base_path('modules/language/resources/json/languages.json');
+        $translations = json_decode(file_get_contents($path), true);
+
+        return view('language::edit', compact('translations', 'language'));
     }
 
     /**
@@ -75,9 +95,30 @@ class LanguageController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Language $language)
     {
-        //
+        // validation
+        $request->validate(
+            [
+                'name' => 'required',
+                'code' => 'required'
+            ],
+            [
+                'name.required' => 'You must select a language',
+                'code.required' => 'You must select a language code'
+            ],
+        );
+
+        // rename file
+        $oldName = base_path('resources/lang/' . $language->code . '.json');
+        $newName = base_path('resources/lang/' . Str::slug($request->code) . '.json');
+
+        // update
+        $language->name = $request->name;
+        $language->code = $request->code;
+        $language->update();
+
+        return back()->with('msg', 'Language updated successfully!');
     }
 
     /**
@@ -85,8 +126,15 @@ class LanguageController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(Language $language)
     {
-        //
+        // delete file
+        if (File::exists(base_path('resources/lang/' . $language->code . '.json'))) {
+            File::delete(base_path('resources/lang/' . $language->code . '.json'));
+        }
+
+        $language->delete();
+
+        return back()->with('msg', 'Language deleted successfully!');
     }
 }

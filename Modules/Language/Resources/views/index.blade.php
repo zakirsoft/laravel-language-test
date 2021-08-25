@@ -11,6 +11,11 @@
                 </div>
 
                 <div class="card-body">
+
+                    @if (session()->has('msg'))
+                        <div class="alert alert-info">{{ session()->get('msg'); }}</div>
+                    @endif
+
                     <table class="table">
                         <thead>
                           <tr>
@@ -27,7 +32,13 @@
                               <td>{{ $language->name }}</td>
                               <td>{{ $language->code }}</td>
                               <td>
-                                  <a href="{{ route('language.view', $language->code) }}" class="btn btn-secondary">{{ __('settings') }}</a>
+                                  <a href="{{ route('language.view', $language->code) }}" class="btn btn-sm btn-secondary">{{ __('settings') }}</a>
+                                  <a href="{{ route('language.edit', $language->id) }}" class="btn btn-sm btn-info">{{ __('edit') }}</a>
+                                  <form action="{{ route('language.delete', $language->id) }}" class="d-inline-block" onclick="return confirm('Are you sure?')" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-danger">{{ __('delete') }}</button>
+                                  </form>
                               </td>
                             </tr>
                             @endforeach

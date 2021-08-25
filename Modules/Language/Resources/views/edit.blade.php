@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h1>{{ __('addlanguage') }}</h1>
+                    <h1>{{ __('Edit Language') }}</h1>
                     <a href="{{ route('language.index') }}" class="btn btn-info">{{ __('back') }}</a>
                 </div>
 
@@ -16,7 +16,8 @@
                         <div class="alert alert-info">{{ session()->get('msg'); }}</div>
                     @endif
 
-                    <form action="{{ route('language.store') }}" method="POST">
+                    <form action="{{ route('language.update', $language->id) }}" method="POST">
+                        @method('PUT')
                         @csrf
                         <div class="mb-3">
                             <div class="row">
@@ -25,8 +26,10 @@
                                 </div>
                                 <div class="col-md-9">
                                     <select name="name" class="form-control @error('name') is-invalid @enderror">
+                                        <option value="" selected disabled> {{ __('selectlanguage') }}</option>
+
                                         @foreach ($translations as $key => $country)
-                                            <option value="{{ $country['name'] }}"> {{ $country['name'] }}</option>
+                                            <option {{ $country['name'] == $language->name ? 'selected': '' }} value="{{ $country['name'] }}"> {{ $country['name'] }}</option>
                                         @endforeach
                                     </select>
 
@@ -41,8 +44,10 @@
                                 </div>
                                 <div class="col-md-9">
                                     <select name="code" class="form-control @error('code') is-invalid @enderror">
+                                        <option value="" selected disabled> {{ __('language') }} {{ __('code') }}</option>
+
                                         @foreach ($translations as $key => $country)
-                                            <option value="{{ $key }}"> {{ $key }}</option>
+                                            <option {{ $country['name'] == $language->name ? 'selected': '' }} value="{{ $key }}"> {{ $key }}</option>
                                         @endforeach
                                       </select>
                                       @error('code') <div class="text-danger">{{ $message }}</div> @enderror

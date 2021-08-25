@@ -22,4 +22,8 @@ Route::middleware(['middleware' => 'setlang'])->group(function () {
     Route::get('languages', [LanguageController::class, 'index'])->name('language.index');
     Route::get('languages/create', [LanguageController::class, 'create'])->name('language.create');
     Route::post('languages/store', [LanguageController::class, 'store'])->name('language.store');
+
+    Route::get('languages/edit/{language}', [LanguageController::class, 'edit'])->name('language.edit');
+    Route::put('languages/update/{language}', [LanguageController::class, 'update'])->name('language.update');
+    Route::delete('languages/delete/{language}', [LanguageController::class, 'destroy'])->name('language.delete');
 });
