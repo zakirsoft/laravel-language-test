@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Language;
+use Modules\Language\Entities\Language;
 
 function languages()
 {

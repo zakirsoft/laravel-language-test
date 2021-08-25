@@ -1,16 +1,25 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
+use Modules\Language\Http\Controllers\LanguageController;
+use Modules\Language\Http\Controllers\TranslationController;
 
-Route::prefix('language')->group(function() {
-    Route::get('/', 'LanguageController@index');
+
+Route::middleware(['middleware' => 'setlang'])->group(function () {
+
+    Route::prefix('language')->group(function () {
+        // translation form show
+        Route::get('language/{code}', [TranslationController::class, 'langView'])->name('language.view');
+
+        // translation form submit
+        Route::post('translation/update', [TranslationController::class, 'transUpdate'])->name('translation.update');
+
+        // set language
+        Route::get('changelanguage/{lang}', [TranslationController::class, 'changeLanguage'])->name('changeLanguage');
+    });
+
+    // language crud
+    Route::get('languages', [LanguageController::class, 'index'])->name('language.index');
+    Route::get('languages/create', [LanguageController::class, 'create'])->name('language.create');
+    Route::post('languages/store', [LanguageController::class, 'store'])->name('language.store');
 });

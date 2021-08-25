@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Modules\Language\Http\Middleware;
 
 use Closure;
-use App\Models\Language;
 use Illuminate\Http\Request;
 
 class SetLangMiddleware

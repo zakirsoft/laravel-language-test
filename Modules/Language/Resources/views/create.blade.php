@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h1>{{ __('addlanguage') }}</h1>
-                    <a href="{{ route('language.index') }}" class="btn btn-info">{{ __('back') }}</a>
+                    <a href="#" class="btn btn-info">{{ __('back') }}</a>
                 </div>
 
                 <div class="card-body">

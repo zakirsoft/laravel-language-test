@@ -44,7 +44,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <li class="nav-item dropdown">
-                            <a id="languageDropdown" class="nav-link dropdown-toggle" href="{{ route('language.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="languageDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ __('selectlanguage') }}
                             </a>
 
@@ -53,7 +53,7 @@
                                     English (default)
                                 </a>
 
-                                @foreach (App\Models\Language::all() as $lang)
+                                @foreach (languages() as $lang)
                                     @csrf
                                     <a class="dropdown-item" href="{{ route('changeLanguage', $lang->code) }}">
                                         {{ $lang->name }}
@@ -77,12 +77,12 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('language.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ __('language') }}
 
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('language.index') }}">
+                                    <a class="dropdown-item" href="#">
                                         {{ __('languagelist') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('language.create') }}">

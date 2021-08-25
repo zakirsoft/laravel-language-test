@@ -2,9 +2,11 @@
 
 namespace Modules\Language\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Language\Entities\Language;
+use Illuminate\Contracts\Support\Renderable;
 
 class LanguageController extends Controller
 {
@@ -14,7 +16,8 @@ class LanguageController extends Controller
      */
     public function index()
     {
-        return view('language::index');
+        $languages = Language::get();
+        return view('language::index', compact('languages'));
     }
 
     /**
@@ -33,7 +36,17 @@ class LanguageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $language = Language::create([
+            'name' => $request->name,
+            'code' => $request->code,
+        ]);
+
+        if ($language) {
+            $baseFile = base_path('resources/lang/default.json');
+            $fileName = base_path('resources/lang/' . Str::slug($request->code) . '.json');
+            copy($baseFile, $fileName);
+        }
+        return back();
     }
 
     /**
