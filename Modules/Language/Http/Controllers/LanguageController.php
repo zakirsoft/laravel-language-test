@@ -98,25 +98,30 @@ class LanguageController extends Controller
     public function update(Request $request, Language $language)
     {
         // validation
-        $request->validate(
-            [
-                'name' => 'required',
-                'code' => 'required'
-            ],
-            [
-                'name.required' => 'You must select a language',
-                'code.required' => 'You must select a language code'
-            ],
-        );
+        // $request->validate(
+        //     [
+        //         'name' => 'required',
+        //         'code' => 'required'
+        //     ],
+        //     [
+        //         'name.required' => 'You must select a language',
+        //         'code.required' => 'You must select a language code'
+        //     ],
+        // );
 
         // rename file
-        $oldName = base_path('resources/lang/' . $language->code . '.json');
-        $newName = base_path('resources/lang/' . Str::slug($request->code) . '.json');
+        $oldFile = $language->code . '.json';
+        $oldName = base_path('resources/lang/' . $oldFile);
+        $newFile = Str::slug($request->code) . '.json';
+        $newName = base_path('resources/lang/' . $newFile);
+
+        $fileRename = rename($oldName, $newName);
 
         // update
-        $language->name = $request->name;
-        $language->code = $request->code;
-        $language->update();
+        $language->update([
+            'name' => $request->name,
+            'code' => $request->code,
+        ]);
 
         return back()->with('msg', 'Language updated successfully!');
     }
