@@ -47,7 +47,7 @@
                                         <option value="" selected disabled> {{ __('language') }} {{ __('code') }}</option>
 
                                         @foreach ($translations as $key => $country)
-                                            <option {{ $country['name'] == $language->name ? 'selected': '' }} value="{{ $key }}"> {{ $key }}</option>
+                                            <option {{ $key == $language->code ? 'selected': '' }} value="{{ $key }}"> {{ $key }}</option>
                                         @endforeach
                                       </select>
                                       @error('code') <div class="text-danger">{{ $message }}</div> @enderror

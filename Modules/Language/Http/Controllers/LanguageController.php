@@ -44,12 +44,14 @@ class LanguageController extends Controller
     {
         $request->validate(
             [
-                'name' => 'required',
-                'code' => 'required'
+                'name' => 'required|unique:languages',
+                'code' => 'required|unique:languages'
             ],
             [
                 'name.required' => 'You must select a language',
-                'code.required' => 'You must select a language code'
+                'code.required' => 'You must select a language code',
+                'name.unique' => 'This language already exists',
+                'code.unique' => 'This code already exists',
             ],
         );
 
@@ -98,16 +100,18 @@ class LanguageController extends Controller
     public function update(Request $request, Language $language)
     {
         // validation
-        // $request->validate(
-        //     [
-        //         'name' => 'required',
-        //         'code' => 'required'
-        //     ],
-        //     [
-        //         'name.required' => 'You must select a language',
-        //         'code.required' => 'You must select a language code'
-        //     ],
-        // );
+        $request->validate(
+            [
+                'name' => "required|unique:languages,name,{$language->id}",
+                'code' => "required|unique:languages,code,{$language->id}"
+            ],
+            [
+                'name.required' => 'You must select a language',
+                'code.required' => 'You must select a code',
+                'name.unique' => 'This language already exists',
+                'code.unique' => 'This code already exists',
+            ],
+        );
 
         // rename file
         $oldFile = $language->code . '.json';
@@ -115,7 +119,7 @@ class LanguageController extends Controller
         $newFile = Str::slug($request->code) . '.json';
         $newName = base_path('resources/lang/' . $newFile);
 
-        $fileRename = rename($oldName, $newName);
+        rename($oldName, $newName);
 
         // update
         $language->update([
